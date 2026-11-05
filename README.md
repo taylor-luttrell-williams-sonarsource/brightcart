@@ -1,6 +1,6 @@
 # BrightCart API
 
-A small Flask + SQLite backend for an outdoor-gear store: product catalog, orders, store credit, refunds, and an admin area.
+A small Flask + SQLite backend for an outdoor-gear store: product catalog, orders, store credit, refunds, and an admin area
 
 ## Run
 
@@ -10,7 +10,7 @@ pip install -r requirements.txt
 python run.py
 ```
 
-On first start the app creates `instance/brightcart.db` and prints the seeded account passwords once.
+On first start the app creates `instance/brightcart.db` and prints the seeded account passwords once
 
 ## Endpoints
 
