@@ -14,8 +14,8 @@ def list_products():
 @bp.get("/products/search")
 def search_products():
     q = request.args.get("q", "")
-    query = f"SELECT id, name, price_cents FROM products WHERE name LIKE '%{q}%'"
-    rows = get_db().execute(query).fetchall()
+    query = "SELECT id, name, price_cents FROM products WHERE name LIKE ?"
+    rows = get_db().execute(query, (f"%{q}%",)).fetchall()
     return jsonify([dict(r) for r in rows])
 
 
