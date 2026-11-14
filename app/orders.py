@@ -5,6 +5,8 @@ from .db import get_db
 
 bp = Blueprint("orders", __name__, url_prefix="/api")
 
+NOT_FOUND_ERROR = "not found"
+
 
 def _order_with_items(db, order_id):
     order = db.execute("SELECT * FROM orders WHERE id = ?", (order_id,)).fetchone()
@@ -60,7 +62,7 @@ def create_order():
 def get_order(order_id):
     order = _order_with_items(get_db(), order_id)
     if order is None:
-        return jsonify(error="not found"), 404
+        return jsonify(error=NOT_FOUND_ERROR), 404
     return jsonify(order)
 
 
@@ -72,7 +74,7 @@ def pay_order(order_id):
         "SELECT * FROM orders WHERE id = ? AND user_id = ?", (order_id, g.user["id"])
     ).fetchone()
     if order is None:
-        return jsonify(error="not found"), 404
+        return jsonify(error=NOT_FOUND_ERROR), 404
     if order["status"] != "pending":
         return jsonify(error="order is not payable"), 409
     method = (request.get_json(silent=True) or {}).get("method", "card")
@@ -96,7 +98,7 @@ def refund_order(order_id):
         "SELECT * FROM orders WHERE id = ? AND user_id = ?", (order_id, g.user["id"])
     ).fetchone()
     if order is None:
-        return jsonify(error="not found"), 404
+        return jsonify(error=NOT_FOUND_ERROR), 404
     db.execute(
         "UPDATE users SET store_credit_cents = store_credit_cents + ? WHERE id = ?",
         (order["total_cents"], g.user["id"]),
